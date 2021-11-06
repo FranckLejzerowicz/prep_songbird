@@ -1,0 +1,54 @@
+models:
+  gOTU_uniq_filt:
+    sex: "C(sex, Diff, levels=['male', 'female'])+age_cat"
+    sex2: "C(sex, Treatment('female'))"
+#    age: "age_years"
+    age_PLUS_height_cm: "age_years+height_cm"
+
+
+#    bmi_cat: "C(bmi_cat, Diff, levels=['Underweight', 'Normal', 'Overweight', 'Obese'])"
+#    bmi_cat_treat: "C(bmi_cat, Treatment('Normal'))"
+#    height_cm: "height_cm"
+  vioscreen_foods_consumed_grams_per_day_1800s_noLiquids:
+    age: "age_years"
+    age_PLUS_height_cm: "age_years+height_cm"
+baselines:
+  gOTU_uniq_filt:
+    age_PLUS_height_cm:
+      age: "age_years"
+      height_cm: "height_cm"
+  vioscreen_foods_consumed_grams_per_day_1800s_noLiquid:
+    age_PLUS_height_cm:
+      age: "age_years"
+filtering:
+  global:
+    "0_0":
+      - '0'
+      - '0'
+    "0.000001_0":
+      - '0.000001'
+      - '0'
+subsets:
+  sex:
+    - - "female"
+    - - "male"
+params:
+  batches:
+    - "2"
+  learns:
+    - "1e-2"
+    - "1e-5"
+  epochs:
+    - "2"
+  thresh_feats:
+    - "0"
+  thresh_samples:
+    - "0"
+  diff_priors:
+    - "0.5"
+  train:
+    - '0.7'
+    - '0.99'
+    - 'not'
+    - 'traintest1'
+    - '1.3'

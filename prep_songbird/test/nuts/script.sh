@@ -1,0 +1,1 @@
+prep_songbird -i /Users/flejzerowicz/programs/prep_songbird/prep_songbird/test/nuts -e qiime2-2021.8  -n test -d gOTU_uniq_filt -s /Users/flejzerowicz/programs/prep_songbird/prep_songbird/test/nuts/songbird.yml

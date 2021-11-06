@@ -1,1 +1,0 @@
-sh /Users/flejzerowicz/programs/prep_songbird/prep_songbird/test/nuts/jobs/songbird_filter/chunks/run_songbird_filter_tst_gOTU_uniq_filt.sh

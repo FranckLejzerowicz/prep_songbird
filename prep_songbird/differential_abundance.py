@@ -531,8 +531,8 @@ class DiffModels(object):
                     dataset_sbs.append(sb_pd)
                 if len(dataset_sbs):
                     dataset_sbs_pd = pd.concat(dataset_sbs, axis=1, sort=False)
-                    odir = get_analysis_folder(self.config.i_datasets_folder,
-                                               'songbird/%s' % dat)
+                    odir = get_analysis_folder(
+                        self.config.i_datasets_folder, 'songbird/%s' % dat)
                     fpo_tsv = '%s/differentials_%s.tsv' % (odir, dat)
                     fpo_qza = '%s/differentials_%s.qza' % (odir, dat)
                     dataset_sbs_pd = dataset_sbs_pd.reset_index()
@@ -545,9 +545,8 @@ class DiffModels(object):
     def get_songbird_pd(self, songbird):
         self.songbird_pd = pd.DataFrame(
             songbird, columns=[
-                'dataset', 'qza', 'meta', 'filter', 'params',
-                'subset', 'differentials', 'baseline', 'html', 'pair'
-            ])
+                'dataset', 'qza', 'meta', 'filter', 'params', 'subset',
+                'differentials', 'baseline', 'html', 'pair'])
 
     def check_metadata_models(self, meta, meta_pd, songbird_models):
         models = {}
@@ -642,7 +641,9 @@ class DiffModels(object):
             dat = row['dataset']
             tax = self.project.datasets[dat].tax[-1]
             qurro_qzv = '%s_qurro.qzv' % splitext(row['differentials'])[0]
-            if not isfile(qurro_qzv) and isfile(row['differentials']):
+            is_qurro = isfile(qurro_qzv)
+            is_diff = isfile(row['differentials'])
+            if self.config.force or not is_qurro and is_diff:
                 cmd = 'qiime qurro differential-plot'
                 cmd += ' --i-table %s' % row['qza']
                 cmd += ' --i-ranks %s.qza' % splitext(row['differentials'])[0]
@@ -702,7 +703,7 @@ class DiffModels(object):
                         # convergence = self.check_stats_convergence(out_paths)
                         cmd, fcmd, bcmd = songbird_cmd(
                             qza, new_qza, new_meta, nsams, params, formula,
-                            bformula, out_paths)
+                            bformula, out_paths, self.config.force)
                         songbird.append([
                             dat, new_qza, meta_fp, filt, '%s_%s' % (
                                 pdir.replace('/', '__'), model),

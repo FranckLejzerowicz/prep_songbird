@@ -168,16 +168,16 @@ def filter_feature_table(qza: str, new_qza: str, meta: str) -> str:
 
 def songbird_cmd(
         qza, new_qza, new_meta, nsams, params,
-        formula, bformula, out_paths) -> tuple:
+        formula, bformula, out_paths, force) -> tuple:
 
     fcmd = ''
-    if not isfile(new_qza):
+    if force or not isfile(new_qza):
         fcmd += filter_feature_table(qza, new_qza, new_meta)
 
     batches = int(params['batches'])
 
     cmd = ''
-    if not isfile(out_paths['diff_qza']):
+    if force or not isfile(out_paths['diff_qza']):
         cmd = '# model\n'
         cmd += '\nqiime songbird multinomial \\\n'
         cmd += ' --i-table %s \\\n' % new_qza
@@ -201,15 +201,15 @@ def songbird_cmd(
         cmd += ' --o-regression-stats %s \\\n' % out_paths['stat']
         cmd += ' --o-regression-biplot %s\n' % out_paths['plot']
 
-    if not isfile(out_paths['diff']):
+    if force or not isfile(out_paths['diff']):
         cmd += run_export(out_paths['diff_qza'], out_paths['diff'], '')
 
     stat_tsv = '%s.txt' % splitext(out_paths['stat'])[0]
-    if not isfile(stat_tsv):
+    if force or not isfile(stat_tsv):
         cmd += run_export(out_paths['stat'], stat_tsv, '')
 
     bcmd = ''
-    if len(out_paths['bdiff_qza']) and not isfile(out_paths['bstat']):
+    if force or len(out_paths['bdiff_qza']) and not isfile(out_paths['bstat']):
         bcmd += '\nqiime songbird multinomial \\\n'
         bcmd += ' --i-table %s \\\n' % new_qza
         bcmd += ' --m-metadata-file %s \\\n' % new_meta
@@ -232,13 +232,13 @@ def songbird_cmd(
         bcmd += ' --o-regression-stats %s \\\n' % out_paths['bstat']
         bcmd += ' --o-regression-biplot %s\n' % out_paths['bplot']
 
-    if not isfile(out_paths['tens']):
+    if force or not isfile(out_paths['tens']):
         cmd += '\nqiime songbird summarize-paired \\\n'
         cmd += ' --i-regression-stats %s \\\n' % out_paths['stat']
         cmd += ' --i-baseline-stats %s \\\n' % out_paths['bstat']
         cmd += ' --o-visualization %s\n' % out_paths['tens']
 
-    if not isfile(out_paths['html']):
+    if force or not isfile(out_paths['html']):
         cmd += run_export(out_paths['tens'], out_paths['html'], 'songbird')
 
     return cmd, fcmd, bcmd

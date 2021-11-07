@@ -86,28 +86,29 @@ class DiffModels(object):
                 params[param] = cur_param
         return params
 
-    def get_filtering(p_yml, diff_dict, models):
+    def get_filtering(self, diff_dict, models):
         dats = []
         filtering = {'': {'0_0': {}}}
         for dat in models.keys():
             dats.append(dat)
             filtering['']['0_0'][dat] = ['0', '0']
         if 'filtering' not in diff_dict:
-            print('No filtering thresholds set in %s\n:' % p_yml)
-        elif 'global' in diff_dict['filtering']:
-            for fname, p_a in diff_dict['filtering']['global'].items():
-                for dat in models.keys():
+            print('No filtering thresholds in %s\n:' % self.config.diff_models)
+        else:
+            if 'global' in diff_dict['filtering']:
+                for fname, p_a in diff_dict['filtering']['global'].items():
+                    for dat in models.keys():
+                        if fname not in filtering['']:
+                            filtering[''][fname] = {}
+                        filtering[''][fname][dat] = p_a
+            for dat, filts in diff_dict['filtering'].items():
+                if dat == 'global':
+                    continue
+                for fname, p_a in filts.items():
                     if fname not in filtering['']:
                         filtering[''][fname] = {}
-                    filtering[''][fname][dat] = p_a
-        for dat, filts in diff_dict['filtering'].items():
-            if dat == 'global':
-                continue
-            for fname, p_a in filts.items():
-                if fname not in filtering['']:
-                    filtering[''][fname] = {}
-                if dat in dats:
-                    filtering[''][fname][dat] = p_a
+                    if dat in dats:
+                        filtering[''][fname][dat] = p_a
 
         return filtering
 

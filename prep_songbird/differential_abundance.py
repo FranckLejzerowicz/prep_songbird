@@ -169,7 +169,7 @@ class DiffModels(object):
                 meta_pd = get_new_meta_pd(
                     data.metadata[0], subset, variable, factors)
                 meta_pd.to_csv(meta, index=False, sep='\t')
-                if isfile(tsv) and isfile(qza):
+                if not self.config.force and isfile(tsv) and isfile(qza):
                     continue
                 tsv_pd = data.data[0][meta_pd.sample_name.tolist()]
                 preval, abund = row_d['prevalence'], row_d['abundance']
@@ -498,8 +498,7 @@ class DiffModels(object):
                                     'Pseudo Q-squared:</a></strong> ')
                                 q2s.append([
                                     pr, d, fr, sb, ml, sr, ps, be, diff,
-                                    float(ls[-1].split('<')[0])
-                                ])
+                                    float(ls[-1].split('<')[0])])
         if q2s:
             self.q2s_pd = pd.DataFrame(q2s, columns=[
                 'pair', 'dataset', 'filter', 'subset', 'model',

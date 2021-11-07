@@ -35,15 +35,11 @@ class CreateScripts(object):
             '-n', params['n_nodes'],
             '-p', params['n_procs'],
             '-M', params['mem_num'], params['mem_dim'],
-            '-c', self.config.chmod,
-            '--noq'
+            '--noq',
+            '--no-loc'
         ]
         if self.slurm:
             cmd.append('--slurm')
-        # if tmp:
-        #     cmd.extend(['-T', tmp])
-        if not self.config.loc:
-            cmd.append('--no-loc')
         subprocess.call(cmd)
 
         if os.getcwd().startswith('/panfs'):

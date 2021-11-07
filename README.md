@@ -335,6 +335,10 @@ following columns:
   - `differentials`: file path to the feature differentials (main output)
   - `Pseudo_Q_squared`: performance value after cross-validation
 
+**Note2**: The output folders will contain a `readme.txt` file explaining 
+the folder name, which can be any of the "sections" setup defined in the 
+config file.
+
 ## Usage
 
 ```
